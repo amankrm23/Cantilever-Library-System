@@ -28,3 +28,33 @@ This system utilizes a relational database with foreign key constraints to maint
 4. Import the `mysql-connector-j-9.7.0.jar` file into your IDE's module dependencies.
 5. In `Main.java`, update the `PASSWORD` variable with your local MySQL root password.
 6. Compile and run `Main.java` to launch the GUI dashboard.
+
+7. ## 💾 Database Schema (Run this before starting)
+To test this application locally, run the following SQL script in your MySQL environment to recreate the database and tables:
+
+```sql
+CREATE DATABASE library_system_db;
+USE library_system_db;
+
+CREATE TABLE books (
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(150) NOT NULL,
+    is_available BOOLEAN DEFAULT TRUE
+);
+
+CREATE TABLE members (
+    member_id INT AUTO_INCREMENT PRIMARY KEY,
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL
+);
+
+CREATE TABLE borrow_records (
+    record_id INT AUTO_INCREMENT PRIMARY KEY,
+    book_id INT,
+    member_id INT,
+    borrow_date DATE DEFAULT (CURRENT_DATE),
+    return_date DATE,
+    FOREIGN KEY (book_id) REFERENCES books(book_id),
+    FOREIGN KEY (member_id) REFERENCES members(member_id)
+);
